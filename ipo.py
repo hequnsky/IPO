@@ -1,9 +1,9 @@
 class Broker(object):
-    name = ''
-    cash_subscription_fee = 100
-    financing_subscription_fee = 100
-    financing_rate = 0.03
-    financing_multiple = 10
+    name = '' #券商名
+    cash_subscription_fee = 100 #现金申购费
+    financing_subscription_fee = 100 #融资申购费
+    financing_rate = 0.03 #融资利率
+    financing_multiple = 10 #杠杆
 
     def __init__(self, name, **kw):
         self.name = name
@@ -21,12 +21,12 @@ class Broker(object):
         return desc
         
 class Stock(object):
-    name = ''
-    ipo_price = 1
-    freeze_day_cnt = 3
-    growth_rate = 0.1
-    lot_winning_rate = 0.03
-    winning_rate_growth = 0.007
+    name = '' #股票名字
+    ipo_price = 10000 #1手价格
+    freeze_day_cnt = 5 #冻结天数
+    growth_rate = 0.1 #预估增值
+    lot_winning_rate = 0.03 #1手中签率
+    winning_rate_growth = 0.007 #单手中签率增幅（线性模型）
 
     def __init__(self, name, ipo_price, **kw):
         self.name = name
@@ -164,8 +164,8 @@ class IPOArrange(object):
             desc = ''
             for scheme in current_scheme_list:
                 current_profit = current_profit + scheme.profit()
-                # desc = desc + scheme.broker.name + str(scheme.cash) + ' ' + str(scheme.use_financing) + '\n'
-            # print(desc + str(current_profit) + '\n')
+                desc = desc + scheme.broker.name + str(scheme.cash) + ' ' + str(scheme.use_financing) + '\n'
+            print(desc + str(current_profit) + '\n')
 
             if (current_profit > the_profit):
                 the_profit = current_profit
@@ -206,15 +206,15 @@ class IPOArrange(object):
 
         k = 0
         while k + sum <= self.cash:
-            if k == 0:
+            if k == 0: # 不投该券商
                 self.arrange_impl(current_scheme_list, layer + 1)
             else:
-                scheme = IPOScheme(self.stock, self.broker_list[layer], k, 0)
+                scheme = IPOScheme(self.stock, self.broker_list[layer], k, 0) #纯现金投该券商
                 current_scheme_list.append(scheme)
                 self.arrange_impl(current_scheme_list, layer + 1)
                 current_scheme_list.pop()
 
-                scheme = IPOScheme(self.stock, self.broker_list[layer], k, 1)
+                scheme = IPOScheme(self.stock, self.broker_list[layer], k, 1) #融资投该券商
                 current_scheme_list.append(scheme)
                 self.arrange_impl(current_scheme_list, layer + 1)
                 current_scheme_list.pop()
