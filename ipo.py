@@ -43,7 +43,7 @@ class Stock(object):
             return self.lot_winning_rate + (lot_cnt - 1) * self.winning_rate_growth
 
     def valid_lot_cnt(self, lot_cnt):
-        lot_cnt_array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 400, 600, 800]
+        lot_cnt_array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 150, 200, 250, 300, 350, 400, 450, 500, 600]
         result = 0
         for i in lot_cnt_array:
             if i <= lot_cnt:
@@ -223,18 +223,25 @@ class IPOArrange(object):
         
 
 
-stock = Stock('测试股票', 10700, freeze_day_cnt = 5, growth_rate = 0.06, lot_winning_rate = 0.05, winning_rate_growth = 0.007)
+stock = Stock('合景UH', 8130, freeze_day_cnt = 7, growth_rate = 0.05, lot_winning_rate = 0.15, winning_rate_growth = 0.0107)
 print(stock.description())
 
 broker_list = []
-broker_list.append(Broker('老虎'))
-broker_list.append(Broker('富途', cash_subscription_fee = 50))
-broker_list.append(Broker('辉立', cash_subscription_fee = 0, financing_subscription_fee = 0))
-broker_list.append(Broker('华泰', cash_subscription_fee = 0, financing_subscription_fee = 0))
-broker_list.append(Broker('艾德', cash_subscription_fee = 0))
-broker_list.append(Broker('耀才', cash_subscription_fee = 0))
+broker_list.append(Broker('老虎', cash_subscription_fee = 100000, financing_subscription_fee = 100, financing_rate = 0.0398))
+broker_list.append(Broker('富途', cash_subscription_fee = 50, financing_subscription_fee = 100, financing_rate = 0.0398))
+broker_list.append(Broker('辉立', cash_subscription_fee = 0, financing_subscription_fee = 0, financing_multiple = 1000, financing_rate = 0.04))
+broker_list.append(Broker('华泰', cash_subscription_fee = 0, financing_subscription_fee = 0, financing_multiple = 20, financing_rate = 0.0380))
+broker_list.append(Broker('艾德', cash_subscription_fee = 0, financing_subscription_fee = 100, financing_rate = 0.0380))
+broker_list.append(Broker('耀才', cash_subscription_fee = 0, financing_subscription_fee = 100, financing_rate = 0.0258 ))
+broker_list.append(Broker('有鱼', cash_subscription_fee = 0, financing_subscription_fee = 0, financing_rate = 0.035))
+broker_list.append(Broker('尊嘉', cash_subscription_fee = 5, financing_subscription_fee = 95, financing_rate = 0.0398))
+broker_list.append(Broker('东财', cash_subscription_fee = 25, financing_subscription_fee = 100000, financing_rate = 0.0398))
+
 for broker in broker_list:
     print(broker.description())
 
-a = IPOArrange(stock, 140000, broker_list)
+a = IPOArrange(stock, 8130 * 12, broker_list)
 a.arrange()
+
+
+# 108016 *0.9
